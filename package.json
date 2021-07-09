@@ -1,0 +1,14 @@
+{
+  "name": "telegrambot",
+  "version": "1.0.0",
+  "description": "Helper telegram bot for personal use",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "skanda",
+  "license": "ISC",
+  "dependencies": {
+    "telegraf": "^4.4.0"
+  }
+}
