@@ -1,16 +1,36 @@
+require('dotenv').config()
 
 const { Telegraf, Markup } = require('telegraf')
+const fetch = require('node-fetch')
+const notes = require('./db.js')
 
-const bot = new Telegraf('1886911278:AAF9j-kftrime1FnrR9K6dwwxLj-gHfEYic')
+
+let noteCollection = null
+notes().then((collection) => {
+  noteCollection = collection
+  console.log('collection successfully retrieved',noteCollection);
+})
+.catch((err) => console.error('Collection retrieval failed',err))
+
+const bot = new Telegraf(process.env.BOT_TOKEN)
 const messages = []
-const keyboard = Markup.inlineKeyboard([
-    Markup.button.callback('Delete', 'delete')
-  ])
-  
+
   bot.start((ctx) => ctx.reply('Hello'))
   bot.help((ctx) => ctx.reply('Help message'))
-  bot.on('message', (ctx) => ctx.telegram.sendMessage(ctx.message.chat.id, ctx.message.text, keyboard))
-  bot.action('delete', (ctx) => ctx.deleteMessage())
+  bot.hears(/http.*/, async (ctx) => {
+    
+    const newNote = {
+      content: ctx.message.text
+    }
+    await noteCollection.insertOne(newNote)
+    .then((res) => {
+      console.log('Successfully inserted');
+    ctx.telegram.sendMessage(ctx.message.chat.id, 'note saved')
+  })
+    .catch((err) => {
+      ctx.telegram.sendMessage(ctx.message.chat.id, 'save failed')
+    })
+  })
   bot.launch()
   
   // Enable graceful stop
