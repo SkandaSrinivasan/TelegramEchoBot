@@ -4,7 +4,9 @@
   "description": "Helper telegram bot for personal use",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "cp * -r ../TelegramEchoBot-Deploy/",
+    "start": "node bot.js"
   },
   "author": "skanda",
   "license": "ISC",
